@@ -46,3 +46,86 @@ During backpropagation this layer computes:
 3. Gradient wrt input
     -> passed backward to previous layer
 ''' 
+
+import numpy as np
+from module import Module
+
+class Linear(Module):
+    def __init__(self,input_features,output_features,initialization):
+        self.in_features=input_features
+        self.out_features=output_features
+
+        if initialization=="he":
+            self.W=np.random.randn(input_features,output_features)*np.sqrt(2/input_features)
+        elif initialization=="xavier":
+            self.W=np.random.randn(input_features,output_features)*np.sqrt(2/(input_features+output_features))
+        else:
+            raise ValueError("initialization should be he or xavier")
+        self.b=np.zeros((1,output_features))
+
+        self.gradient_W=None
+        self.gradient_b=None        
+    
+    def forward(self,inputs):
+        self.inputs=inputs # caching inputs for backprop
+        Z=np.dot(inputs,self.W) + self.b # weighted sum on inputs + bias 
+        return Z
+    
+    def backward(self,gradient_outputs):
+        # recieve the gradient output from the l+1 layer
+        # then compute delta L/ delta W
+        # then compute delta L/ delta b
+        # then compute the gradient output for l-1 layer
+        self.gradient_W=np.dot(self.inputs.T,gradient_outputs)
+        self.gradient_b=np.sum(gradient_outputs,axis=0,keepdims=True)
+        gradient_input=np.dot(gradient_outputs,self.W.T)
+        return gradient_input
+    
+    def parameters(self):
+        return [self.W,self.b]
+    
+    def gradients(self):
+        return [self.gradient_W,self.gradient_b]
+    
+# these are the gradients only for the linear layer excluding the activation and other only the Wx+b
+
+    # recieve gradient from next layer
+    #
+    # gradient_outputs = dL/dZ
+    #
+    # tells how sensitive loss is
+    # wrt current layer outputs
+    # -----------------------------------
+    # Weight Gradient
+    #
+    # dL/dW = X^T . gradient_outputs
+    #
+    # derived using chain rule:
+    #
+    # dL/dW = dL/dZ * dZ/dW
+    #
+    # since:
+    # Z = XW + b
+    #
+    # derivative wrt W becomes X
+    # -----------------------------------
+    # Bias Gradient
+    #
+    # dL/db = sum(gradient_outputs)
+    #
+    # because bias is added equally
+    # to every sample in batch
+    # -----------------------------------
+    # Input Gradient
+    #
+    # dL/dX = gradient_outputs . W^T
+    #
+    # derived using chain rule:
+    #
+    # dL/dX = dL/dZ * dZ/dX
+    #
+    # derivative wrt X becomes W
+    #
+    # this gradient gets passed
+    # to previous layer
+    # -----------------------------------
