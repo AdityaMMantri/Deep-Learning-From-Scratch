@@ -6,8 +6,6 @@ This file contains Optimizers used to update the trainable parameters of the neu
 3. Help reduce the loss over time
 
 HOW IT WORKS
-
-
 After backpropagation:
  - every layer contains gradients
 

@@ -21,3 +21,20 @@ Because every layer follows this common interface,
 the Sequential model can dynamically loop through layers
 during forward and backward propagation.
 '''
+
+class Module:
+   def forward(self):
+      raise NotImplementedError("Forward pass method not implemented") # every child class inherithing this class must have forward function
+   
+   def backward(self):
+      raise NotImplementedError("Backward pass method not implemented")# every child class inherithing this class must have backward function
+   
+   def parameters(self):
+      # every child class inheriting this class can return
+      # its trainable parameters like weights and biases
+      return []
+   
+   def gradients(self):
+      # every child class inheriting this class can return
+      # gradients of its trainable parameters
+      return []

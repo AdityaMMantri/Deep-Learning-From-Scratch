@@ -12,7 +12,6 @@ Input is passed layer-by-layer:
 Each layer receives output from the previous layer.
 
 BACKWARD PASS
-
 Gradients flow in reverse order:
     Output → Linear → ReLU → Linear → Input
 
