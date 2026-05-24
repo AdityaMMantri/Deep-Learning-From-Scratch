@@ -20,6 +20,7 @@ import numpy as np
 from module import Module
 
 class Sigmoid(Module):
+
     def forward(self,inputs):
         # computes activated output during forward propagation
         output=1/(1+np.exp(-inputs)) # Sigmoid activation
@@ -31,8 +32,15 @@ class Sigmoid(Module):
         sigmoid_gradient=self.output*(1-self.output) # Derivative of sigmoid
         gradient_inputs=gradient_outputs*sigmoid_gradient # Apply chain rule
         return gradient_inputs
+    
+    def parameters(self):
+        return []
+    
+    def gradients(self):
+        return []
 
 class Tanh(Module):
+
     def forward(self,inputs):
         output=np.tanh(inputs)
         self.output=output
@@ -42,8 +50,15 @@ class Tanh(Module):
         tanh_gradient=1-(self.output**2)
         gradient_inputs=gradient_outputs*tanh_gradient
         return gradient_inputs
+    
+    def parameters(self):
+        return []
+    
+    def gradients(self):
+        return []
 
 class ReLU(Module):
+    
     def forward(self,inputs):
         self.inputs=inputs # caching inputs becuase we will use inputs in backprop
         output=np.maximum(0,inputs)
@@ -52,4 +67,10 @@ class ReLU(Module):
         gradient_inputs=gradient_outputs.copy() # Copy incoming gradients
         gradient_inputs[self.inputs <= 0] = 0
         return gradient_inputs
+    
+    def parameters(self):
+        return []
+    
+    def gradients(self):
+        return []
 

@@ -63,12 +63,13 @@ class Linear(Module):
             raise ValueError("initialization should be he or xavier")
         self.b=np.zeros((1,output_features))
 
-        self.gradient_W=None
-        self.gradient_b=None        
+        self.gradient_W=np.zeros_like(self.W)
+        self.gradient_b=np.zeros_like(self.b)        
     
     def forward(self,inputs):
         self.inputs=inputs # caching inputs for backprop
-        Z=np.dot(inputs,self.W) + self.b # weighted sum on inputs + bias 
+        Z=np.dot(inputs,self.W) + self.b # weighted sum on inputs + bias
+        self.output=Z # caching output aslo 
         return Z
     
     def backward(self,gradient_outputs):
@@ -76,10 +77,11 @@ class Linear(Module):
         # then compute delta L/ delta W
         # then compute delta L/ delta b
         # then compute the gradient output for l-1 layer
-        self.gradient_W=np.dot(self.inputs.T,gradient_outputs)
-        self.gradient_b=np.sum(gradient_outputs,axis=0,keepdims=True)
-        gradient_input=np.dot(gradient_outputs,self.W.T)
-        return gradient_input
+        batch_size=self.inputs.shape[0]
+        self.gradient_W=np.dot(self.inputs.T,gradient_outputs)/batch_size
+        self.gradient_b=np.sum(gradient_outputs,axis=0,keepdims=True)/batch_size
+        gradient_inputs=np.dot(gradient_outputs,self.W.T)
+        return gradient_inputs
     
     def parameters(self):
         return [self.W,self.b]
