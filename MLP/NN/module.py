@@ -23,10 +23,10 @@ during forward and backward propagation.
 '''
 
 class Module:
-   def forward(self):
+   def forward(self,inputs):
       raise NotImplementedError("Forward pass method not implemented") # every child class inherithing this class must have forward function
    
-   def backward(self):
+   def backward(self,gradient):
       raise NotImplementedError("Backward pass method not implemented")# every child class inherithing this class must have backward function
    
    def parameters(self):
