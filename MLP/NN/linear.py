@@ -77,9 +77,8 @@ class Linear(Module):
         # then compute delta L/ delta W
         # then compute delta L/ delta b
         # then compute the gradient output for l-1 layer
-        batch_size=self.inputs.shape[0]
-        self.gradient_W=np.dot(self.inputs.T,gradient_outputs)/batch_size
-        self.gradient_b=np.sum(gradient_outputs,axis=0,keepdims=True)/batch_size
+        self.gradient_W=np.dot(self.inputs.T,gradient_outputs)
+        self.gradient_b=np.sum(gradient_outputs,axis=0,keepdims=True)
         gradient_inputs=np.dot(gradient_outputs,self.W.T)
         return gradient_inputs
     
