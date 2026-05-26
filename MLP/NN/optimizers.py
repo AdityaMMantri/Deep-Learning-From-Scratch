@@ -17,7 +17,11 @@ The optimizer:
 import numpy as np
 from sequential import Sequential
 
-class SGD:
+class Optimizer:
+    def update_step(self,model):
+        raise NotImplementedError("Optimizer update step not defined")
+
+class SGD(Optimizer):
     def __init__(self,learning_rate):
         if learning_rate<=0:
             raise ValueError("Learning rate must be positive")
@@ -27,14 +31,14 @@ class SGD:
         parameters=model.parameters()
         gradients=model.gradients()
 
-        for parameters,gradients in zip(parameters,gradients): # zip is to form pairs (W1,dW1) etc.
-            parameters-=self.learning_rate*gradients # update rule
+        for parameter,gradients in zip(parameters,gradients): # zip is to form pairs (W1,dW1) etc.
+            parameter-=self.learning_rate*gradients # update rule
 
-class Mometum:
+class Momentum(Optimizer):
     def __init__(self,learning_rate,beta):
         if learning_rate<=0:
             raise ValueError("Learning rate must be positive")
-        if not(0<=beta<=1):
+        if not(0<=beta<1):
             raise ValueError("Momentum Coefficent must be between 0 and 1")
         self.learning_rate=learning_rate
         self.beta=beta
