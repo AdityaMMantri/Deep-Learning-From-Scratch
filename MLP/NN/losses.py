@@ -25,7 +25,14 @@ This gradient starts the backward propagation process.
 
 import numpy as np
 
-class MSELoss:
+class Loss:
+    def forward(self,predictions,targets):
+        raise NotImplementedError("Forward pass method not implemented")
+    
+    def backward(self):
+        raise NotImplementedError("Backward pass method not implemented")
+
+class MSELoss(Loss):
     def forward(self,predictions,targets):
         self.predictions=predictions
         self.targets=targets # this is caching ie... we are storing values for backward pass
@@ -38,7 +45,7 @@ class MSELoss:
         gradient = (2*(self.predictions-self.targets))/batch_size
         return gradient
 
-class BCELoss:
+class BCELoss(Loss):
     def forward(self,predictions,targets):
         predictions=np.clip(predictions,1e-7,1-1e-7)
 

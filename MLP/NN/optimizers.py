@@ -52,3 +52,4 @@ class Mometum:
         for i,(parameter,gradient) in enumerate(zip(parameters,gradients)):
                 self.velocities[i] = (self.beta * self.velocities[i]+ (1 - self.beta) * gradient)
                 parameter -= (self.learning_rate* self.velocities[i])
+# momentum is not fully written by me just fucking shit optimizer ಠ╭╮ಠ
