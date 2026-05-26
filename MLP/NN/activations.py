@@ -17,7 +17,7 @@ Computes gradients of the activation function and passes gradients backward.
 ''' 
 
 import numpy as np
-from module import Module
+from NN.module import Module
 
 class Sigmoid(Module):
 

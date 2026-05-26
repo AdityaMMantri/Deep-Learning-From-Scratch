@@ -80,7 +80,7 @@ class Trainer:
 
                 # OPTIMIZER UPDATE
                 self.optimizer.update_step(self.model)
-            epoch_loss+=(loss * batch_X.shape[0])
+            epoch_loss/=number_of_batches
             loss_history.append(epoch_loss)
 
             if verbose:
@@ -90,9 +90,6 @@ class Trainer:
                     f" | Loss: {epoch_loss:.6f}")
         return loss_history
 
-
-
-
-#Trainer is basically a high-level orchestration/controller wrapper around the ENTIRE learning pipeline.
+#Trainer is basically a high-level orchetration/controller wrapper around the ENTIRE learning pipeline.
 #It treats the whole neural network as ONE black-box model object.
 #Instead of managing every single layer it just gives a much more user friendly approch by giving a single model object

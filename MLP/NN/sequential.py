@@ -18,7 +18,7 @@ Gradients flow in reverse order:
 Each layer computes gradients and passes them backward.
 '''
 
-from module import Module
+from NN.module import Module
 from typing import Tuple
 
 # tensorflow style API is copied (～￣▽￣)～ although pytorch is better ;)

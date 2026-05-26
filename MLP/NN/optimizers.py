@@ -15,7 +15,7 @@ The optimizer:
 ''' 
 
 import numpy as np
-from sequential import Sequential
+from NN.sequential import Sequential
 
 class Optimizer:
     def update_step(self,model):

@@ -48,7 +48,7 @@ During backpropagation this layer computes:
 ''' 
 
 import numpy as np
-from module import Module
+from NN.module import Module
 
 class Linear(Module):
     def __init__(self,input_features,output_features,initialization):
@@ -57,10 +57,10 @@ class Linear(Module):
 
         if initialization=="he":
             self.W=np.random.randn(input_features,output_features)*np.sqrt(2/input_features)
-        elif initialization=="xavier":
+        elif initialization=="xe":
             self.W=np.random.randn(input_features,output_features)*np.sqrt(2/(input_features+output_features))
         else:
-            raise ValueError("initialization should be he or xavier")
+            raise ValueError("initialization should be he or xe")
         self.b=np.zeros((1,output_features))
 
         self.gradient_W=np.zeros_like(self.W)
