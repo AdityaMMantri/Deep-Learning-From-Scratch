@@ -19,6 +19,10 @@ from NN.activations import ReLU
 from NN.losses import MSELoss
 from NN.trainer import Trainer
 
+from interpretability.weights import (
+    plot_weight_heatmaps,
+    plot_weight_distribution
+)
 
 data=fetch_california_housing()
 X=data.data
@@ -92,6 +96,10 @@ print("\nFirst 10 Predictions:\n")
 
 print(predictions[:10])
 
+plot_weight_heatmaps(model)
+
+plot_weight_distribution(model)
+
 # =================================================
 # PYTORCH COMPARISON
 # =================================================
@@ -99,171 +107,171 @@ print(predictions[:10])
 # so it does not conflict with your custom NN.
 # =================================================
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import (
-    TensorDataset,
-    DataLoader
-)
+# import torch
+# import torch.nn as nn
+# import torch.optim as optim
+# from torch.utils.data import (
+#     TensorDataset,
+#     DataLoader
+# )
 
 
-# =================================================
-# NUMPY → TENSOR CONVERSION
-# =================================================
+# # =================================================
+# # NUMPY → TENSOR CONVERSION
+# # =================================================
 
-torch_train_inputs = torch.tensor(
-    X_train,
-    dtype=torch.float32
-)
+# torch_train_inputs = torch.tensor(
+#     X_train,
+#     dtype=torch.float32
+# )
 
-torch_train_targets = torch.tensor(
-    y_train,
-    dtype=torch.float32
-)
+# torch_train_targets = torch.tensor(
+#     y_train,
+#     dtype=torch.float32
+# )
 
-torch_test_inputs = torch.tensor(
-    X_test,
-    dtype=torch.float32
-)
+# torch_test_inputs = torch.tensor(
+#     X_test,
+#     dtype=torch.float32
+# )
 
-torch_test_targets = torch.tensor(
-    y_test,
-    dtype=torch.float32
-)
-
-
-# =================================================
-# DATALOADER
-# =================================================
-
-torch_dataset = TensorDataset(
-    torch_train_inputs,
-    torch_train_targets
-)
-
-torch_loader = DataLoader(
-    torch_dataset,
-    batch_size=32,
-    shuffle=True
-)
+# torch_test_targets = torch.tensor(
+#     y_test,
+#     dtype=torch.float32
+# )
 
 
-# =================================================
-# BUILD PYTORCH MODEL
-# =================================================
+# # =================================================
+# # DATALOADER
+# # =================================================
 
-torch_network = nn.Sequential(
+# torch_dataset = TensorDataset(
+#     torch_train_inputs,
+#     torch_train_targets
+# )
 
-    nn.Linear(8,64),
-
-    nn.ReLU(),
-
-    nn.Linear(64,32),
-
-    nn.ReLU(),
-
-    nn.Linear(32,16),
-
-    nn.ReLU(),
-
-    nn.Linear(16,1)
-)
+# torch_loader = DataLoader(
+#     torch_dataset,
+#     batch_size=32,
+#     shuffle=True
+# )
 
 
-torch_loss_function = nn.MSELoss()
+# # =================================================
+# # BUILD PYTORCH MODEL
+# # =================================================
 
-torch_optimizer = optim.SGD(
-    torch_network.parameters(),
-    lr=0.001)
+# torch_network = nn.Sequential(
 
-torch_epochs = 100
+#     nn.Linear(8,64),
 
-for epoch in range(torch_epochs):
+#     nn.ReLU(),
 
-    accumulated_loss = 0.0
+#     nn.Linear(64,32),
 
-    for current_inputs, current_targets in torch_loader:
+#     nn.ReLU(),
 
-        # clear previous gradients
-        torch_optimizer.zero_grad()
+#     nn.Linear(32,16),
 
-        # forward pass
-        torch_predictions = torch_network(
-            current_inputs
-        )
+#     nn.ReLU(),
 
-        # compute loss
-        torch_loss = torch_loss_function(
-            torch_predictions,
-            current_targets
-        )
-
-        # backward pass
-        torch_loss.backward()
-
-        # update weights
-        torch_optimizer.step()
-
-        accumulated_loss += (
-            torch_loss.item()
-        )
-
-    mean_loss = (
-        accumulated_loss
-        /
-        len(torch_loader)
-    )
-
-    print(
-        f"[PyTorch] "
-        f"Epoch {epoch+1}/{torch_epochs}"
-        f" | Loss: {mean_loss:.6f}"
-    )
+#     nn.Linear(16,1)
+# )
 
 
-# =================================================
-# TEST PREDICTIONS
-# =================================================
+# torch_loss_function = nn.MSELoss()
 
-with torch.no_grad():
+# torch_optimizer = optim.SGD(
+#     torch_network.parameters(),
+#     lr=0.001)
 
-    torch_test_predictions = (
-        torch_network(torch_test_inputs)
-    )
+# torch_epochs = 100
 
-print("\n[PyTorch] Prediction Shape:\n")
+# for epoch in range(torch_epochs):
 
-print(torch_test_predictions.shape)
+#     accumulated_loss = 0.0
 
-print("\n[PyTorch] First 10 Predictions:\n")
+#     for current_inputs, current_targets in torch_loader:
 
-print(torch_test_predictions[:10])
+#         # clear previous gradients
+#         torch_optimizer.zero_grad()
+
+#         # forward pass
+#         torch_predictions = torch_network(
+#             current_inputs
+#         )
+
+#         # compute loss
+#         torch_loss = torch_loss_function(
+#             torch_predictions,
+#             current_targets
+#         )
+
+#         # backward pass
+#         torch_loss.backward()
+
+#         # update weights
+#         torch_optimizer.step()
+
+#         accumulated_loss += (
+#             torch_loss.item()
+#         )
+
+#     mean_loss = (
+#         accumulated_loss
+#         /
+#         len(torch_loader)
+#     )
+
+#     print(
+#         f"[PyTorch] "
+#         f"Epoch {epoch+1}/{torch_epochs}"
+#         f" | Loss: {mean_loss:.6f}"
+#     )
 
 
-# =================================================
-# COMPARISON
-# =================================================
+# # =================================================
+# # TEST PREDICTIONS
+# # =================================================
 
-print("\n=================================================")
-print("CUSTOM NN vs PYTORCH")
-print("=================================================")
+# with torch.no_grad():
 
-print("\nCustom NN Prediction Shape:")
+#     torch_test_predictions = (
+#         torch_network(torch_test_inputs)
+#     )
 
-print(predictions.shape)
+# print("\n[PyTorch] Prediction Shape:\n")
 
-print("\nPyTorch Prediction Shape:")
+# print(torch_test_predictions.shape)
 
-print(torch_test_predictions.shape)
+# print("\n[PyTorch] First 10 Predictions:\n")
 
-print("\nCustom NN First Prediction:")
+# print(torch_test_predictions[:10])
 
-print(predictions[0])
 
-print("\nPyTorch First Prediction:")
+# # =================================================
+# # COMPARISON
+# # =================================================
 
-print(
-    torch_test_predictions[0]
-    .numpy()
-)
+# print("\n=================================================")
+# print("CUSTOM NN vs PYTORCH")
+# print("=================================================")
+
+# print("\nCustom NN Prediction Shape:")
+
+# print(predictions.shape)
+
+# print("\nPyTorch Prediction Shape:")
+
+# print(torch_test_predictions.shape)
+
+# print("\nCustom NN First Prediction:")
+
+# print(predictions[0])
+
+# print("\nPyTorch First Prediction:")
+
+# print(
+#     torch_test_predictions[0]
+#     .numpy()
+# )
