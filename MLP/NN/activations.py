@@ -20,6 +20,7 @@ import numpy as np
 from NN.module import Module
 
 class Sigmoid(Module):
+    # by default the init contrustor will be called by the Parent ie... Module class
 
     def forward(self,inputs):
         # computes activated output during forward propagation
@@ -40,7 +41,7 @@ class Sigmoid(Module):
         return []
 
 class Tanh(Module):
-
+    # by default the init contrustor will be called by the Parent ie... Module class
     def forward(self,inputs):
         output=np.tanh(inputs)
         self.output=output
@@ -58,11 +59,13 @@ class Tanh(Module):
         return []
 
 class ReLU(Module):
-    
+    # by default the init contrustor will be called by the Parent ie... Module class    
     def forward(self,inputs):
         self.inputs=inputs # caching inputs becuase we will use inputs in backprop
         output=np.maximum(0,inputs)
+        self.output=output
         return output
+    
     def backward(self,gradient_outputs):
         gradient_inputs=gradient_outputs.copy() # Copy incoming gradients
         gradient_inputs[self.inputs <= 0] = 0

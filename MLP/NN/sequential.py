@@ -25,6 +25,7 @@ from typing import Tuple
 class Sequential(Module):
 
     def __init__(self, *layers:Module):
+        super().__init__()
         # Store all layers of the network in order.
         # * -> unpacking/packing opertor-> will take all the layer objects and store them in a tuple 
         # to convert to a single argumment because a NN can have many layers meaning any possible number of arguments

@@ -23,6 +23,11 @@ during forward and backward propagation.
 '''
 
 class Module:
+
+   def __init__(self):
+      self.inputs=None
+      self.output=None
+
    def forward(self,inputs):
       raise NotImplementedError("Forward pass method not implemented") # every child class inherithing this class must have forward function
    

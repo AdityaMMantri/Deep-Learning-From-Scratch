@@ -52,9 +52,9 @@ from NN.module import Module
 
 class Linear(Module):
     def __init__(self,input_features,output_features,initialization):
+        super().__init__()
         self.in_features=input_features
         self.out_features=output_features
-
         if initialization=="he":
             self.W=np.random.randn(input_features,output_features)*np.sqrt(2/input_features)
         elif initialization=="xe":
