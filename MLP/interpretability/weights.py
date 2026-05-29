@@ -31,7 +31,7 @@ def plot_weight_heatmaps(model:Sequential):
     for i,layer in enumerate(model.layers):
         if isinstance(layer,Linear):
             plt.figure(figsize=(14,6),dpi=120)
-            image=plt.imshow(layer.W,aspect="equal",cmap="magma",interpolation="nearest")
+            image=plt.imshow(layer.W,aspect="auto",cmap="magma",interpolation="nearest")
             cbar=plt.colorbar(image)
             cbar.set_label("Weight Magnitude",fontsize=12)
             plt.title(f"Layer {i} Weight Matrix",fontsize=18,fontweight="bold",pad=15)
